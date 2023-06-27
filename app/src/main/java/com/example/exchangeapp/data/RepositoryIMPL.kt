@@ -29,10 +29,9 @@ class RepositoryIMPL(application: Application) : Repository {
             .subscribeOn(Schedulers.io())
             .map { mapper.mapResponseToCurrencyList(it) }
             .subscribe({
-                Log.i("qwerty", it.toString())
                 currencyDao.insert(it.map { mapper.mapDtoToDbModel(it) })
             }, {
-                Log.i("qwerty", "Throwable = ${it.message}")
+
             })
 
     }

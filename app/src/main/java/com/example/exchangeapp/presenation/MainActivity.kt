@@ -28,53 +28,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        val adapter = CurrencyAdapter(this)
         binding.recyclerViewCurrencies.adapter = adapter
-
-
-        val tempCurrencyEntity = CurrencyEntity("111", "222", 333, 444.0, 555.0)
-        val tempList = listOf(tempCurrencyEntity)
-        adapter.currencyList = tempList
-
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setListeners()
-
-
 
         viewModel.currencyList.observe(this, Observer {
             adapter.currencyList = it
         })
 
-
         viewModel.hasConnectionLD.observe(this) {
-            Log.i("qwerty", "connection ============== $it")
             showWarning(this, it)
         }
 
         viewModel.saveStartTime(App.currentDate)
         viewModel.startTime.observe(this) {
             val t = TimeUtils.convertTimeStampToTime(it.time)
-            binding.textViewTimeInfo.text = "Время запуска: $t"
+            binding.textViewTimeInfo.text = getString(R.string.start_time) + t
         }
-
 
     }
 
     private fun setListeners() {
         binding.buttonLoad.setOnClickListener {
-//            observeViewModel()
             viewModel.loadData()
             viewModel.saveStartTime(App.currentDate)
         }
     }
 
-/*    private fun observeViewModel() {
-        viewModel.currencyList.observe(this) {
-            adapter.currencyList = it
-        }
-    }*/
 
     private fun showWarning(context: Context, isConnected: Boolean) {
         with(binding.textViewWarning) {

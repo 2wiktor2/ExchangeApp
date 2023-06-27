@@ -20,9 +20,6 @@ class TimeRepositoryImpl(application: Application) : TimeRepository {
     }
 
     override fun getTime(): LiveData<AppStartTime> {
-
         return timeDao.getTime()
-
-
     }
 }

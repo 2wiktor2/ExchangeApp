@@ -5,4 +5,5 @@
     <string name="load_from_network_warning">Загрузка из сети</string>
     <string name="load_from_database_warning">Загрузка из базы данных</string>
     <string name="network_warning">Соединение недоступно</string>
+    <string name="start_time">\"Время запуска: \"</string>
 </resources>
