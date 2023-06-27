@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ExchangeApp</string>
+    <string name="date">Дата:</string>
+    <string name="button_text_load_data">Load data</string>
+    <string name="load_from_network_warning">Загрузка из сети</string>
+    <string name="load_from_database_warning">Загрузка из базы данных</string>
+    <string name="network_warning">Соединение недоступно</string>
+</resources>
