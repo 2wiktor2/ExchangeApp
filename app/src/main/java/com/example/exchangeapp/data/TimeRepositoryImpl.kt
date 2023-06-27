@@ -1,6 +1,8 @@
 package com.example.exchangeapp.data
 
 import android.app.Application
+import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.exchangeapp.TimeUtils
 import com.example.exchangeapp.data.database.AppDataBase
 import com.example.exchangeapp.data.database.AppStartTime
@@ -11,26 +13,16 @@ import io.reactivex.schedulers.Schedulers
 class TimeRepositoryImpl(application: Application) : TimeRepository {
 
     private val timeDao = AppDataBase.getInstance(application).timeDao()
-    private val timeUtils = TimeUtils()
 
 
     override fun saveTime(time: AppStartTime) {
-        timeDao.insertTime(time)
+        val disposable = timeDao.insertTime(time).subscribeOn(Schedulers.io()).subscribe()
     }
 
-    override fun getTime(): String {
+    override fun getTime(): LiveData<AppStartTime> {
 
-        var timeResult = ""
+        return timeDao.getTime()
 
-        val disposable = timeDao.getTime()
-            .subscribeOn(Schedulers.io())
-            .map { timeUtils.convertTimeStampToTime(it.time) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                timeResult = it
-            }, {
 
-            })
-        return timeResult
     }
 }

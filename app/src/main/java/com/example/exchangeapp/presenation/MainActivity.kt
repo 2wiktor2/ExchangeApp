@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.exchangeapp.App
 import com.example.exchangeapp.R
+import com.example.exchangeapp.TimeUtils
 import com.example.exchangeapp.databinding.ActivityMainBinding
 import com.example.exchangeapp.domain.CurrencyEntity
 import com.example.exchangeapp.presenation.adapters.CurrencyAdapter
@@ -32,13 +33,15 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerViewCurrencies.adapter = adapter
 
 
-        val tempCurrencyEntity = CurrencyEntity("111","222",333, 444.0, 555.0)
+        val tempCurrencyEntity = CurrencyEntity("111", "222", 333, 444.0, 555.0)
         val tempList = listOf(tempCurrencyEntity)
         adapter.currencyList = tempList
 
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setListeners()
+
+
 
         viewModel.currencyList.observe(this, Observer {
             adapter.currencyList = it
@@ -50,27 +53,31 @@ class MainActivity : AppCompatActivity() {
             showWarning(this, it)
         }
 
-        viewModel.saveStartTime(App.currentDate.time)
-        showToast(App.currentDate.time.toString())
+        viewModel.saveStartTime(App.currentDate)
+        viewModel.startTime.observe(this) {
+            val t = TimeUtils.convertTimeStampToTime(it.time)
+            binding.textViewTimeInfo.text = "Время запуска: $t"
+        }
+
+
     }
 
     private fun setListeners() {
         binding.buttonLoad.setOnClickListener {
-            observeViewModel()
+//            observeViewModel()
             viewModel.loadData()
-            viewModel.getStartTime()
-            viewModel.saveStartTime(App.currentDate.time)
+            viewModel.saveStartTime(App.currentDate)
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.currencyList.observe(this, Observer {
+/*    private fun observeViewModel() {
+        viewModel.currencyList.observe(this) {
             adapter.currencyList = it
-        })
-    }
+        }
+    }*/
 
     private fun showWarning(context: Context, isConnected: Boolean) {
-        with(binding.textViewDate) {
+        with(binding.textViewWarning) {
             if (isConnected) {
                 text = context.getString(R.string.load_from_network_warning)
                 setTextColor(

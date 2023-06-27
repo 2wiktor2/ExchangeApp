@@ -27,14 +27,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val saveTimeUseCase = SaveTimeUseCase(timeRepository)
 
 
-   val currencyList = getCurrencyListUseCase.getCurrencyList()
+    val currencyList = getCurrencyListUseCase.getCurrencyList()
 
-
-
-//    private val _currencyList = MutableLiveData<List<CurrencyEntity>>()
-//    var currencyList: LiveData<List<CurrencyEntity>>
-//        get() = _currencyList
-
+    val startTime = getTimeUseCase.getTime()
 
     private val _hasConnectionLD = MutableLiveData<Boolean>()
     val hasConnectionLD: LiveData<Boolean>
@@ -44,14 +39,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadData() {
         setHasConnection()
         if (isNetworkAvailable(this.getApplication())) {
-            Log.i("qwerty", "connection ============== true")
-            Log.i("qwerty", "загрузка из сети")
             loadDataUseCase.loadData()
             getCurrencyListUseCase.getCurrencyList()
         } else {
-            Log.i("qwerty", "connection ============== false")
-            Log.i("qwerty", "загрузка из бд")
-           getCurrencyListUseCase.getCurrencyList()
+            getCurrencyListUseCase.getCurrencyList()
         }
     }
 
@@ -69,12 +60,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
     fun saveStartTime(time: Long) {
-        Log.i("qwerty", "saveStartTime ============== time = $time")
         val appStartTime = AppStartTime(time = time)
         saveTimeUseCase.saveTime(appStartTime)
     }
 
-    fun getStartTime(): String {
-        return getTimeUseCase.getTime()
-    }
 }
